@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Text = UnityEngine.UI.Text;
 
 #region Enum
 
@@ -11,11 +12,11 @@ public enum Difficult
 }
 public enum Tag
 {
-    Danger, TopBorder, Platform
+    Danger, Platform
 }
 public enum GameState
 {
-    Menu, Start, Pause, Death, Lose,
+    Menu, Wait, Start, Pause, Death, Lose,
 }
 #endregion
 
@@ -31,8 +32,14 @@ public class GameManager : Singleton<GameManager>
     // Start function
     private void Start()
     {
-        life = 3;
+        UpdateState(GameState.Wait);
         _UIGameplay = UIGameplay.Instance;
+        life = 3;
+        StartCoroutine(nameof(WaitForStart));
+    }
+
+    IEnumerator WaitForStart(){
+        yield return new WaitForSeconds(3);
         UpdateState(GameState.Start);
     }
 

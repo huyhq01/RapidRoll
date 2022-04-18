@@ -10,12 +10,25 @@ public class PlayerControl : MonoBehaviour
     private float horizontalInput;
     private int score;
     private UIGameplay _UIGameplay;
-    private bool isAddScore{get;set;}
+    private bool isAddScore { get; set; }
+    private bool isWaiting;
 
     // SERIALIZE FIELD
     [SerializeField] private float speed;
     [SerializeField] private bool isScoreCal;
 
+    private void Awake()
+    {
+        GameManager.OnGameStateChanged += OnStateWait;
+    }
+    void OnStateWait(GameState state)
+    {
+        isWaiting = (state == GameState.Wait);
+        if (state != GameState.Wait)
+        {
+            GameManager.OnGameStateChanged -= OnStateWait;
+        }
+    }
 
     private void Start()
     {
@@ -25,8 +38,11 @@ public class PlayerControl : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        horizontalInput = Input.GetAxis(HORIZONTAL_INPUT);
-        transform.Translate(Vector3.right * horizontalInput * Time.deltaTime * speed);
+        if (!isWaiting)
+        {
+            horizontalInput = Input.GetAxis(HORIZONTAL_INPUT);
+            transform.Translate(Vector3.right * horizontalInput * Time.deltaTime * speed);
+        }
     }
 
     private void Update()
