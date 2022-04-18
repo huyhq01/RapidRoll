@@ -5,10 +5,11 @@ using UnityEngine;
 public class PlayerControl : MonoBehaviour
 {
     const string HORIZONTAL_INPUT = "Horizontal";
-    const string TAG_HORIZONTAL_BOUND = "HorizontalBound";
     [SerializeField] float speed;
     Rigidbody2D rbody;
     float horizontalInput;
+
+    [SerializeField] bool isScoreCal;
     // Start is called before the first frame update
     void Start()
     {
@@ -23,5 +24,13 @@ public class PlayerControl : MonoBehaviour
     private void FixedUpdate()
     {
         transform.Translate(Vector3.right * horizontalInput * Time.deltaTime * speed);   
+    }
+    private void OnCollisionExit2D(Collision2D other)
+    {
+        Score.Instance.IncreaseScore(true);
+    }
+    private void OnCollisionStay2D(Collision2D other)
+    {
+        Score.Instance.IncreaseScore(false);    
     }
 }

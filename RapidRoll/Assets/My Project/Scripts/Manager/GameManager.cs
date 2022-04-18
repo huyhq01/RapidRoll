@@ -8,9 +8,9 @@ public enum Difficult
 }
 public enum Tag
 {
-    Danger, TopBorder
+    Danger, TopBorder, Platform
 }
 public class GameManager : Singleton<GameManager>
 {
-
+    
 }

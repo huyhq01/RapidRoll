@@ -14,8 +14,8 @@ GameObject:
   - component: {fileID: -3529230128635489036}
   - component: {fileID: 8995784614669173945}
   m_Layer: 0
-  m_Name: Danger Zone
-  m_TagString: Untagged
+  m_Name: Danger
+  m_TagString: Danger
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
