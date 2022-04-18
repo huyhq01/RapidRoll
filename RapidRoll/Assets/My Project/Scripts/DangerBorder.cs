@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class DangerBorder : MonoBehaviour
 {
-    float width;
     // Start is called before the first frame update
     void Start()
     {
-        width = GetComponent<BoxCollider2D>().size.x;
-        transform.localScale = new Vector2(width, transform.localScale.y);
-        transform.position = new Vector2(0, SpawnManager.Instance.GetTopBound());
+        Invoke(nameof(SetUpTransform),.1f);
+        
+    }
+    void SetUpTransform(){
+        transform.localScale = new Vector2(Mathf.Abs(SpawnManager.Instance.GetLeftBorder() * 2), transform.localScale.y);
+        transform.position = new Vector2(0, SpawnManager.Instance.GetTopBorder());
     }
 }

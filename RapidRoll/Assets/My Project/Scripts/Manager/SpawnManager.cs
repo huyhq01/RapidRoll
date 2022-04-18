@@ -18,9 +18,9 @@ public class SpawnManager : Singleton<SpawnManager>
     private int countToSpawn;
     private float leftBound, bottomBound, widthPrefab, leftBorder, bottomBorder;
 
-    public float GetTopBound() { return -bottomBound; }
     public float GetBottomBound() { return bottomBound; }
     public float GetLeftBorder() { return leftBorder; }
+    public float GetTopBorder() { return -bottomBorder; }
 
 
     // Start is called before the first frame update
@@ -88,6 +88,14 @@ public class SpawnManager : Singleton<SpawnManager>
 
     public void Deactive(GameObject platform)
     {
-        Ppool.Release(platform);
+
+        if (platform.CompareTag(Tag.Danger.ToString()))
+        {
+            Dpool.Release(platform);
+        }
+        else
+        {
+            Ppool.Release(platform);
+        }
     }
 }
