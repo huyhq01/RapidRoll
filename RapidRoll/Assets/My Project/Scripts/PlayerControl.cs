@@ -5,32 +5,55 @@ using UnityEngine;
 public class PlayerControl : MonoBehaviour
 {
     const string HORIZONTAL_INPUT = "Horizontal";
-    [SerializeField] float speed;
-    Rigidbody2D rbody;
-    float horizontalInput;
 
-    [SerializeField] bool isScoreCal;
-    // Start is called before the first frame update
-    void Start()
-    {
-        rbody = GetComponent<Rigidbody2D>();
-    }
+    // PRVATE VARIABLES
+    private float horizontalInput;
+    private int score;
+    private UIGameplay _UIGameplay;
+    private bool isAddScore{get;set;}
 
-    // Update is called once per frame
-    void Update()
+    // SERIALIZE FIELD
+    [SerializeField] private float speed;
+    [SerializeField] private bool isScoreCal;
+
+
+    private void Start()
     {
-        horizontalInput = Input.GetAxis(HORIZONTAL_INPUT);
+        score = 0;
+        _UIGameplay = UIGameplay.Instance;
+        _UIGameplay.SetScore(score);
     }
     private void FixedUpdate()
     {
-        transform.Translate(Vector3.right * horizontalInput * Time.deltaTime * speed);   
+        horizontalInput = Input.GetAxis(HORIZONTAL_INPUT);
+        transform.Translate(Vector3.right * horizontalInput * Time.deltaTime * speed);
+    }
+
+    private void Update()
+    {
+        if (isAddScore)
+        {
+            score++;
+            _UIGameplay.SetScore(score);
+        }
     }
     private void OnCollisionExit2D(Collision2D other)
     {
-        Score.Instance.IncreaseScore(true);
+        isAddScore = true;
     }
+
     private void OnCollisionStay2D(Collision2D other)
     {
-        Score.Instance.IncreaseScore(false);    
+        isAddScore = false;
     }
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.CompareTag(Tag.Danger.ToString()))
+        {
+            Debug.Log("ooppps");
+            GameManager.Instance.UpdateState(GameState.Death);
+        }
+    }
+
 }

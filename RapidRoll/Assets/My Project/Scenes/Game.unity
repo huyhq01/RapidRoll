@@ -396,7 +396,6 @@ GameObject:
   m_Component:
   - component: {fileID: 818338854}
   - component: {fileID: 818338853}
-  - component: {fileID: 818338855}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -431,19 +430,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &818338855
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 818338852}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e202b21e650b3f84ba15bdf22bf88960, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  scoreText: {fileID: 1924554999}
 --- !u!1 &1786299425
 GameObject:
   m_ObjectHideFlags: 0
@@ -456,7 +442,7 @@ GameObject:
   - component: {fileID: 1786299428}
   - component: {fileID: 1786299427}
   m_Layer: 5
-  m_Name: Lives
+  m_Name: Lifes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -515,7 +501,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Lives: 0'
+  m_Text: 'Lifes: 0'
 --- !u!222 &1786299428
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -549,7 +535,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7182838980970150329, guid: e80ca8f3c9b565d48ae00b584f1216ce, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3.23
+      value: -3
       objectReference: {fileID: 0}
     - target: {fileID: 7182838980970150329, guid: e80ca8f3c9b565d48ae00b584f1216ce, type: 3}
       propertyPath: m_LocalPosition.z
@@ -601,9 +587,10 @@ GameObject:
   - component: {fileID: 1866518672}
   - component: {fileID: 1866518671}
   - component: {fileID: 1866518670}
+  - component: {fileID: 1866518674}
   m_Layer: 5
   m_Name: Canvas
-  m_TagString: Untagged
+  m_TagString: Danger
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -691,6 +678,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1866518674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1866518669}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e202b21e650b3f84ba15bdf22bf88960, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scoreText: {fileID: 1924554999}
+  LifeText: {fileID: 1786299427}
 --- !u!1 &1919977097
 GameObject:
   m_ObjectHideFlags: 0
@@ -901,7 +902,7 @@ GameObject:
   - component: {fileID: 1969437242}
   m_Layer: 0
   m_Name: DeadZone
-  m_TagString: Untagged
+  m_TagString: Danger
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -914,8 +915,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1969437239}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -7, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: -8, z: 0}
+  m_LocalScale: {x: 1, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2023343525}
@@ -931,7 +932,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -1100,7 +1101,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4773743236519818945, guid: 35190f4ab62807748869c23f0ff6bbf7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.97
+      value: -2
       objectReference: {fileID: 0}
     - target: {fileID: 4773743236519818945, guid: 35190f4ab62807748869c23f0ff6bbf7, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1149,6 +1150,10 @@ PrefabInstance:
     - target: {fileID: 4966354596730645742, guid: 35190f4ab62807748869c23f0ff6bbf7, type: 3}
       propertyPath: m_BodyType
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4966354596730645742, guid: 35190f4ab62807748869c23f0ff6bbf7, type: 3}
+      propertyPath: m_Simulated
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7727996518106880737, guid: 35190f4ab62807748869c23f0ff6bbf7, type: 3}
       propertyPath: speed
