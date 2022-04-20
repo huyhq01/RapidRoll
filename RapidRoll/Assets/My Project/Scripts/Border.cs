@@ -8,7 +8,8 @@ public class Border : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Invoke(nameof(ChangePosition),.1f);
+        // Invoke(nameof(ChangePosition),.1f);
+        ChangePosition();
         
     }
     void ChangePosition(){

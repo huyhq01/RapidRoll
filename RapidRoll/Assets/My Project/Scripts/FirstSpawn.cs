@@ -5,16 +5,29 @@ using UnityEngine;
 public class FirstSpawn : MonoBehaviour
 {
     // Start is called before the first frame update
+    [SerializeField] private bool isBot, isTop;
     void Start()
     {
-        Invoke(nameof(RandomSpawn), .1f);
-    }
-
-    void RandomSpawn() {
-        transform.position = new Vector2(
+        if (isBot)
+        {
+            transform.position = new Vector2(
             Random.Range(
-                SpawnManager.Instance.GetLeftBound(), 
-                -SpawnManager.Instance.GetLeftBound()),
-            Random.Range(-4f,-1f));
+                SpawnManager.Instance.GetLeftBound(),
+                -SpawnManager.Instance.GetLeftBound()), -7);
+        }
+        else if (isTop)
+        {
+            transform.position = new Vector2(
+            Random.Range(
+                SpawnManager.Instance.GetLeftBound(),
+                -SpawnManager.Instance.GetLeftBound()), 0);
+        }
+        else
+        {
+            transform.position = new Vector2(
+            Random.Range(
+                SpawnManager.Instance.GetLeftBound(),
+                -SpawnManager.Instance.GetLeftBound()), -3);
+        }
     }
 }

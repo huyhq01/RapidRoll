@@ -7,7 +7,8 @@ public class DangerBorder : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Invoke(nameof(SetUpTransform),.1f);
+        // Invoke(nameof(SetUpTransform),.1f);
+        SetUpTransform();
         
     }
     void SetUpTransform(){

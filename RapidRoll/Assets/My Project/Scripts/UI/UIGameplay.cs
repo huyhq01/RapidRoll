@@ -5,7 +5,7 @@ using Text = UnityEngine.UI.Text;
 public class UIGameplay : Singleton<UIGameplay>
 {
     [SerializeField] Text scoreText, LifeText, countDownText;
-    private int time{get;set;}
+    private int time { get; set; }
     private void Awake()
     {
         GameManager.UpdateState += OnStateWait;
@@ -34,6 +34,7 @@ public class UIGameplay : Singleton<UIGameplay>
         {
             countDownText.gameObject.SetActive(false);
             CancelInvoke(nameof(CountDown));
+            GameManager.Instance.HandleState(GameState.Start);
         }
     }
 

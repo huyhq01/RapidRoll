@@ -19,10 +19,11 @@ public class SpawnManager : Singleton<SpawnManager>
     private float leftBound, bottomBound, widthPrefab, leftBorder, bottomBorder;
     private bool isWaiting { get; set; }
 
-    public float GetBottomBound() { return bottomBound; }
-    public float GetLeftBorder() { return leftBorder; }
-    public float GetTopBorder() { return -bottomBorder; }
     public float GetLeftBound() { return leftBound; }
+    public float GetBottomBound() { return bottomBound; }
+
+    public float GetTopBorder() { return -bottomBorder; }
+    public float GetLeftBorder() { return leftBorder; }
 
 
     private void Awake()
@@ -44,7 +45,6 @@ public class SpawnManager : Singleton<SpawnManager>
         bottomBorder = edgeCamCoordinate.y;
         leftBound = leftBorder + (widthPrefab / 2);
         bottomBound = bottomBorder - 2;
-
 
         #region createPool
         Ppool = new ObjectPool<GameObject>(() =>
@@ -79,9 +79,21 @@ public class SpawnManager : Singleton<SpawnManager>
 
         #endregion
 
+        // random map (spawn platform)
+        // RandomFirstSpawn();
         countToSpawn = Random.Range(1, 4);
         InvokeRepeating(nameof(Spawn), 0, spawnRate);
     }
+
+    void RandomFirstSpawn()
+    {
+        for (int i = 0; i < 2; i++)
+        {
+            spawnPosition = new Vector3(Random.Range(leftBound, -leftBound), bottomBorder + (bottomBorder * -i));
+            GameObject p = Ppool.Get();
+        }
+    }
+
     void Spawn()
     {
         // waiting for starting game here
@@ -103,7 +115,6 @@ public class SpawnManager : Singleton<SpawnManager>
 
     public void Deactive(GameObject platform)
     {
-
         if (platform.CompareTag(Tag.Danger.ToString()))
         {
             Dpool.Release(platform);

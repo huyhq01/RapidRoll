@@ -59,19 +59,11 @@ public class GameManager : Singleton<GameManager>
             case GameState.Lose:
                 break;
         }
-
-        // OnGameStateChanged(newState);
         UpdateState?.Invoke(newState);
-    }
 
+    }
     private void HandleWait(){
-        StartCoroutine(nameof(WaitForStart));
-    }
-
-    IEnumerator WaitForStart()
-    {
-        yield return new WaitForSeconds(3);
-        HandleState(GameState.Start);
+        // find platform in range and put player on one of them (random)
     }
 
     private void HandleStart()

@@ -11,7 +11,7 @@ public class PlayerControl : MonoBehaviour
     private int score;
     private UIGameplay _UIGameplay;
     private bool isAddScore { get; set; }
-    private bool isWaiting{get;set;}
+    private bool isWaiting { get; set; }
 
     // SERIALIZE FIELD
     [SerializeField] private float speed;
@@ -24,7 +24,7 @@ public class PlayerControl : MonoBehaviour
     void OnStateWait(GameState state)
     {
         isWaiting = (state == GameState.Wait);
-        Debug.Log("Current state is: " + state + " AND is waiting = " + isWaiting);
+        // Debug.Log("Current state is: " + state + " AND is waiting = " + isWaiting);
     }
 
     private void Start()
