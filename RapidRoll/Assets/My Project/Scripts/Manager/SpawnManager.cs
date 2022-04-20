@@ -27,15 +27,11 @@ public class SpawnManager : Singleton<SpawnManager>
 
     private void Awake()
     {
-        GameManager.OnGameStateChanged += OnStateWait;
+        GameManager.UpdateState += OnStateWait;
     }
     void OnStateWait(GameState state)
     {
         isWaiting = (state == GameState.Wait);
-        if (state != GameState.Wait)
-        {
-            GameManager.OnGameStateChanged -= OnStateWait;
-        }
     }
 
     // Start is called before the first frame update

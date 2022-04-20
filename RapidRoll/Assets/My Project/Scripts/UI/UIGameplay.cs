@@ -5,15 +5,29 @@ using Text = UnityEngine.UI.Text;
 public class UIGameplay : Singleton<UIGameplay>
 {
     [SerializeField] Text scoreText, LifeText, countDownText;
-    private int time;
+    private int time{get;set;}
     private void Awake()
     {
-        time  =3;
-        countDownText.text = time.ToString();
-        InvokeRepeating(nameof(CountDown),1,1);
+        GameManager.UpdateState += OnStateWait;
+    }
+    void OnStateWait(GameState state)
+    {
+        if (state == GameState.Wait)
+        {
+            InvokeCountDown();
+        }
     }
 
-    void CountDown(){
+    public void InvokeCountDown()
+    {
+        countDownText.gameObject.SetActive(true);
+        time = 3;
+        countDownText.text = time.ToString();
+        InvokeRepeating(nameof(CountDown), 1, 1);
+    }
+
+    void CountDown()
+    {
         time--;
         countDownText.text = time.ToString();
         if (time == 0)

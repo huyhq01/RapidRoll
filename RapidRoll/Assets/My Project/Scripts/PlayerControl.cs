@@ -11,7 +11,7 @@ public class PlayerControl : MonoBehaviour
     private int score;
     private UIGameplay _UIGameplay;
     private bool isAddScore { get; set; }
-    private bool isWaiting;
+    private bool isWaiting{get;set;}
 
     // SERIALIZE FIELD
     [SerializeField] private float speed;
@@ -19,15 +19,12 @@ public class PlayerControl : MonoBehaviour
 
     private void Awake()
     {
-        GameManager.OnGameStateChanged += OnStateWait;
+        GameManager.UpdateState += OnStateWait;
     }
     void OnStateWait(GameState state)
     {
         isWaiting = (state == GameState.Wait);
-        if (state != GameState.Wait)
-        {
-            GameManager.OnGameStateChanged -= OnStateWait;
-        }
+        Debug.Log("Current state is: " + state + " AND is waiting = " + isWaiting);
     }
 
     private void Start()
@@ -67,8 +64,8 @@ public class PlayerControl : MonoBehaviour
     {
         if (other.gameObject.CompareTag(Tag.Danger.ToString()))
         {
-            Debug.Log("ooppps");
-            GameManager.Instance.UpdateState(GameState.Death);
+            GameManager.Instance.HandleState(GameState.Death);
+            GameManager.Instance.HandleState(GameState.Wait);
         }
     }
 

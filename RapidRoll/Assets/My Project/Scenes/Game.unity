@@ -304,7 +304,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3737879386048403164, guid: f41428afaf6c3cf4483e9e43ebaeb110, type: 3}
       propertyPath: m_IsTrigger
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3737879386048403165, guid: f41428afaf6c3cf4483e9e43ebaeb110, type: 3}
       propertyPath: m_Name
@@ -391,27 +391,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5459521a0fe139949b6d2151558dd879, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!50 &813679562
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 505655075}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
 --- !u!1 &818338852
 GameObject:
   m_ObjectHideFlags: 0

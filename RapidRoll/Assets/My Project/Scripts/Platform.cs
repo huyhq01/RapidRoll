@@ -5,27 +5,27 @@ using UnityEngine.Pool;
 public class Platform : MonoBehaviour
 {
     private bool isWaiting;
+    [SerializeField] float speed;
+    
+    
     private void Awake()
     {
-        GameManager.OnGameStateChanged += OnStateWait;
+        GameManager.UpdateState += OnStateWait;
     }
     void OnStateWait(GameState state)
     {
         isWaiting = (state == GameState.Wait);
-        if (state != GameState.Wait)
-        {
-            GameManager.OnGameStateChanged -= OnStateWait;
-        }
     }
-    [SerializeField] float speed;
-    private void FixedUpdate()
+
+    void Update()
     {
         if (!isWaiting)
         {
             transform.Translate(Vector3.up * Time.deltaTime * speed);
         }
     }
-    private void OnTriggerEnter2D(Collider2D other)
+
+    private void OnCollisionEnter2D(Collision2D other)
     {
         if (other.gameObject.CompareTag(Tag.Danger.ToString()))
         {

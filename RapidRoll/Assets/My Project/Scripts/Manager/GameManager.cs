@@ -23,7 +23,7 @@ public enum GameState
 public class GameManager : Singleton<GameManager>
 {
     GameState state;
-    public static event Action<GameState> OnGameStateChanged;
+    public static event Action<GameState> UpdateState;
 
     private int life;
 
@@ -32,24 +32,21 @@ public class GameManager : Singleton<GameManager>
     // Start function
     private void Start()
     {
-        UpdateState(GameState.Wait);
         _UIGameplay = UIGameplay.Instance;
+        HandleState(GameState.Wait);
         life = 3;
-        StartCoroutine(nameof(WaitForStart));
     }
 
-    IEnumerator WaitForStart(){
-        yield return new WaitForSeconds(3);
-        UpdateState(GameState.Start);
-    }
-
-    public void UpdateState(GameState newState)
+    public void HandleState(GameState newState)
     {
         state = newState;
 
         switch (state)
         {
             case GameState.Menu:
+                break;
+            case GameState.Wait:
+                HandleWait();
                 break;
             case GameState.Start:
                 HandleStart();
@@ -64,21 +61,33 @@ public class GameManager : Singleton<GameManager>
         }
 
         // OnGameStateChanged(newState);
-        OnGameStateChanged?.Invoke(newState);
+        UpdateState?.Invoke(newState);
+    }
+
+    private void HandleWait(){
+        StartCoroutine(nameof(WaitForStart));
+    }
+
+    IEnumerator WaitForStart()
+    {
+        yield return new WaitForSeconds(3);
+        HandleState(GameState.Start);
     }
 
     private void HandleStart()
     {
         _UIGameplay.SetLife(life);
     }
+
     private void HandleDeath()
     {
-        if (life > 1)
+        life--;
+        _UIGameplay.SetLife(life);
+
+        // from Dead to lose
+        if (life == 0)
         {
-            life--;
-            _UIGameplay.SetLife(life);
+            HandleState(GameState.Lose);
         }
-
     }
-
 }
