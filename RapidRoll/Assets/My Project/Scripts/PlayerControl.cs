@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerControl : MonoBehaviour
+public class PlayerControl : Singleton<PlayerControl>
 {
     const string HORIZONTAL_INPUT = "Horizontal";
 
@@ -15,7 +15,6 @@ public class PlayerControl : MonoBehaviour
 
     // SERIALIZE FIELD
     [SerializeField] private float speed;
-    [SerializeField] private bool isScoreCal;
 
     private void Awake()
     {
@@ -24,7 +23,6 @@ public class PlayerControl : MonoBehaviour
     void OnStateWait(GameState state)
     {
         isWaiting = (state == GameState.Wait);
-        // Debug.Log("Current state is: " + state + " AND is waiting = " + isWaiting);
     }
 
     private void Start()
@@ -32,18 +30,34 @@ public class PlayerControl : MonoBehaviour
         score = 0;
         _UIGameplay = UIGameplay.Instance;
         _UIGameplay.SetScore(score);
+        RandomSpawn();
+    }
+
+    void RandomSpawn()
+    {
+        GameObject[] platforms = GameObject.FindGameObjectsWithTag(Tag.Platform.ToString());
+        foreach (GameObject item in platforms)
+        {
+            if (item.transform.position.y <= 2f)
+            {
+                Debug.Log("change position");
+                this.transform.position = new Vector2(item.transform.position.x, item.transform.position.y + .6f);
+                break;
+            }
+        }
     }
     private void FixedUpdate()
+    {
+        
+    }
+
+    private void Update()
     {
         if (!isWaiting)
         {
             horizontalInput = Input.GetAxis(HORIZONTAL_INPUT);
             transform.Translate(Vector3.right * horizontalInput * Time.deltaTime * speed);
         }
-    }
-
-    private void Update()
-    {
         if (isAddScore)
         {
             score++;

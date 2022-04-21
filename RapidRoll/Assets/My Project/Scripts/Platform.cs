@@ -15,10 +15,9 @@ public class Platform : MonoBehaviour
     void OnStateWait(GameState state)
     {
         isWaiting = (state == GameState.Wait);
-        Debug.Log("State in platform script: " + state + " and iswaiting = " + isWaiting);
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (!isWaiting)
         {

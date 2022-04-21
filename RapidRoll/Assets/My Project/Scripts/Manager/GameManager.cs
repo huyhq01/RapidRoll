@@ -33,8 +33,8 @@ public class GameManager : Singleton<GameManager>
     private void Start()
     {
         _UIGameplay = UIGameplay.Instance;
-        HandleState(GameState.Wait);
         life = 3;
+        HandleState(GameState.Wait);
     }
 
     public void HandleState(GameState newState)
@@ -62,8 +62,19 @@ public class GameManager : Singleton<GameManager>
         UpdateState?.Invoke(newState);
 
     }
-    private void HandleWait(){
+    private void HandleWait()
+    {
         // find platform in range and put player on one of them (random)
+        GameObject[] platforms = GameObject.FindGameObjectsWithTag(Tag.Platform.ToString());
+        foreach (GameObject item in platforms)
+        {
+            if (item.transform.position.y <= 2)
+            {
+                PlayerControl.Instance.gameObject.transform.position = 
+                    new Vector2(item.transform.position.x,item.transform.position.y+.6f);
+                break;
+            }
+        }
     }
 
     private void HandleStart()

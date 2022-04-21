@@ -79,7 +79,6 @@ public class SpawnManager : Singleton<SpawnManager>
 
         #endregion
 
-        // random map (spawn platform)
         // RandomFirstSpawn();
         countToSpawn = Random.Range(1, 4);
         InvokeRepeating(nameof(Spawn), 0, spawnRate);
