@@ -11,7 +11,8 @@ public class PlayerControl : Singleton<PlayerControl>
     private int score;
     private UIGameplay _UIGameplay;
     private bool isAddScore { get; set; }
-    private bool isWaiting { get; set; }
+    private bool isStart { get; set; }
+    private bool isPause { get; set; }
 
     // SERIALIZE FIELD
     [SerializeField] private float speed;
@@ -22,7 +23,8 @@ public class PlayerControl : Singleton<PlayerControl>
     }
     void OnStateWait(GameState state)
     {
-        isWaiting = (state == GameState.Wait);
+        isStart = (state == GameState.Start);
+        isPause = (state == GameState.Pause);
     }
 
     private void Start()
@@ -40,23 +42,23 @@ public class PlayerControl : Singleton<PlayerControl>
         {
             if (item.transform.position.y <= 2f)
             {
-                Debug.Log("change position");
-                this.transform.position = new Vector2(item.transform.position.x, item.transform.position.y + .6f);
+                this.transform.position = new Vector2(item.transform.position.x, item.transform.position.y + .5f);
                 break;
             }
         }
     }
-    private void FixedUpdate()
-    {
-        
-    }
 
     private void Update()
     {
-        if (!isWaiting)
+        if (isStart)
         {
-            horizontalInput = Input.GetAxis(HORIZONTAL_INPUT);
-            transform.Translate(Vector3.right * horizontalInput * Time.deltaTime * speed);
+            AllowControl();
+        }
+        else
+        {
+            this.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
+            if (Input.GetKeyDown(KeyCode.Escape) && isPause)
+                GameManager.Instance.HandleState(GameState.Start);
         }
         if (isAddScore)
         {
@@ -64,6 +66,20 @@ public class PlayerControl : Singleton<PlayerControl>
             _UIGameplay.SetScore(score);
         }
     }
+
+    void AllowControl()
+    {
+        this.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation;
+
+        horizontalInput = Input.GetAxis(HORIZONTAL_INPUT);
+        transform.Translate(Vector3.right * horizontalInput * Time.deltaTime * speed);
+
+        if (Input.GetKeyDown(KeyCode.Escape) && !isPause)
+        {
+            GameManager.Instance.HandleState(GameState.Pause);
+        }
+    }
+
     private void OnCollisionExit2D(Collision2D other)
     {
         isAddScore = true;

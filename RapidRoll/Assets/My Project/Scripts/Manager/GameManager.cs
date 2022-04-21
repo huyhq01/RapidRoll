@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Text = UnityEngine.UI.Text;
 
 #region Enum
 
@@ -16,7 +15,12 @@ public enum Tag
 }
 public enum GameState
 {
-    Menu, Wait, Start, Pause, Death, Lose,
+    Menu,
+    Wait,
+    Start,
+    Pause,
+    Death,
+    Lose,
 }
 #endregion
 
@@ -40,6 +44,7 @@ public class GameManager : Singleton<GameManager>
     public void HandleState(GameState newState)
     {
         state = newState;
+        Debug.Log("Current state: " + state);
 
         switch (state)
         {
@@ -62,6 +67,10 @@ public class GameManager : Singleton<GameManager>
         UpdateState?.Invoke(newState);
 
     }
+    private void HandlePause()
+    {
+
+    }
     private void HandleWait()
     {
         // find platform in range and put player on one of them (random)
@@ -70,8 +79,8 @@ public class GameManager : Singleton<GameManager>
         {
             if (item.transform.position.y <= 2)
             {
-                PlayerControl.Instance.gameObject.transform.position = 
-                    new Vector2(item.transform.position.x,item.transform.position.y+.6f);
+                PlayerControl.Instance.gameObject.transform.position =
+                    new Vector2(item.transform.position.x, item.transform.position.y +.5f);
                 break;
             }
         }

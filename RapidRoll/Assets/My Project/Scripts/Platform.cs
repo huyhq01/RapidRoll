@@ -4,22 +4,21 @@ using UnityEngine;
 using UnityEngine.Pool;
 public class Platform : MonoBehaviour
 {
-    private bool isWaiting { get; set; }
+    private bool isStopped { get; set; }
     [SerializeField] float speed;
 
     private void Awake()
     {
         GameManager.UpdateState += OnStateWait;
-        // isWaiting = true;
     }
     void OnStateWait(GameState state)
     {
-        isWaiting = (state == GameState.Wait);
+        isStopped = (state == GameState.Wait || state == GameState.Pause);
     }
 
-    void FixedUpdate()
+    void Update()
     {
-        if (!isWaiting)
+        if (!isStopped)
         {
             transform.Translate(Vector3.up * Time.deltaTime * speed);
         }

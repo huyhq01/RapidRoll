@@ -15,9 +15,9 @@ public class SpawnManager : Singleton<SpawnManager>
     private ObjectPool<GameObject> Ppool;
     private ObjectPool<GameObject> Dpool;
     private Vector3 spawnPosition;
-    private int countToSpawn;
+    private int countToSpawnDanger;
     private float leftBound, bottomBound, widthPrefab, leftBorder, bottomBorder;
-    private bool isWaiting { get; set; }
+    private bool isStart { get; set; }
 
     public float GetLeftBound() { return leftBound; }
     public float GetBottomBound() { return bottomBound; }
@@ -32,7 +32,7 @@ public class SpawnManager : Singleton<SpawnManager>
     }
     void OnStateWait(GameState state)
     {
-        isWaiting = (state == GameState.Wait);
+        isStart = (state == GameState.Start);
     }
 
     // Start is called before the first frame update
@@ -80,34 +80,24 @@ public class SpawnManager : Singleton<SpawnManager>
         #endregion
 
         // RandomFirstSpawn();
-        countToSpawn = Random.Range(1, 4);
+        countToSpawnDanger = Random.Range(1, 4);
         InvokeRepeating(nameof(Spawn), 0, spawnRate);
-    }
-
-    void RandomFirstSpawn()
-    {
-        for (int i = 0; i < 2; i++)
-        {
-            spawnPosition = new Vector3(Random.Range(leftBound, -leftBound), bottomBorder + (bottomBorder * -i));
-            GameObject p = Ppool.Get();
-        }
     }
 
     void Spawn()
     {
-        // waiting for starting game here
-        if (!isWaiting)
+        if (isStart)
         {
             spawnPosition = new Vector3(Random.Range(leftBound, -leftBound), bottomBound);
-            if (countToSpawn == 1)
+            if (countToSpawnDanger == 1)
             {
                 GameObject d = Dpool.Get();
-                countToSpawn = Random.Range(2, 5);
+                countToSpawnDanger = Random.Range(2, 5);
             }
             else
             {
                 GameObject p = Ppool.Get();
-                countToSpawn--;
+                countToSpawnDanger--;
             }
         }
     }

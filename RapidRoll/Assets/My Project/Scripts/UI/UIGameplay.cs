@@ -1,20 +1,32 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Text = UnityEngine.UI.Text;
+using UnityEngine.UI;
 public class UIGameplay : Singleton<UIGameplay>
 {
     [SerializeField] Text scoreText, LifeText, countDownText;
+    [SerializeField] GameObject PauseMenu;
+    [SerializeField] Image OnPauseBackground;
     private int time { get; set; }
     private void Awake()
     {
         GameManager.UpdateState += OnStateWait;
+        OnPauseBackground.rectTransform.sizeDelta = new Vector2(Screen.width, Screen.height);
     }
     void OnStateWait(GameState state)
     {
         if (state == GameState.Wait)
         {
             InvokeCountDown();
+        }
+
+        if (state == GameState.Pause)
+        {
+            PauseMenu.gameObject.SetActive(true);
+        }
+        else
+        {
+            PauseMenu.gameObject.SetActive(false);
         }
     }
 
