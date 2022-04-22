@@ -8,29 +8,36 @@ public class PlayerControl : Singleton<PlayerControl>
 
     // PRVATE VARIABLES
     private float horizontalInput;
-    private int score;
+    public int score { get; private set; }
     private UIGameplay _UIGameplay;
     private bool isAddScore { get; set; }
     private bool isStart { get; set; }
     private bool isPause { get; set; }
+    private int life;
 
     // SERIALIZE FIELD
     [SerializeField] private float speed;
 
     private void Awake()
     {
-        GameManager.UpdateState += OnStateWait;
+        GameManager.UpdateState += PlayerControlOnStateChange;
     }
-    void OnStateWait(GameState state)
+    void PlayerControlOnStateChange(GameState state)
     {
-        isStart = (state == GameState.Start);
+        isStart = (state == GameState.Continue);
         isPause = (state == GameState.Pause);
+        if (state == GameState.Restart)
+        {
+            GameManager.UpdateState -= PlayerControlOnStateChange;
+        }
     }
 
     private void Start()
     {
         score = 0;
+        life = 3;
         _UIGameplay = UIGameplay.Instance;
+        _UIGameplay.SetLife(life);
         _UIGameplay.SetScore(score);
         RandomSpawn();
     }
@@ -58,7 +65,7 @@ public class PlayerControl : Singleton<PlayerControl>
         {
             this.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
             if (Input.GetKeyDown(KeyCode.Escape) && isPause)
-                GameManager.Instance.HandleState(GameState.Start);
+                GameManager.Instance.HandleState(GameState.Continue);
         }
         if (isAddScore)
         {
@@ -95,7 +102,18 @@ public class PlayerControl : Singleton<PlayerControl>
         if (other.gameObject.CompareTag(Tag.Danger.ToString()))
         {
             GameManager.Instance.HandleState(GameState.Death);
-            GameManager.Instance.HandleState(GameState.Wait);
+            life--;
+            _UIGameplay.SetLife(life);
+            if (life > 0)
+            {
+                GameManager.Instance.HandleState(GameState.Wait);
+            }
+            else
+            {
+                GameManager.Instance.HandleState(GameState.Lose);
+
+            }
+
         }
     }
 

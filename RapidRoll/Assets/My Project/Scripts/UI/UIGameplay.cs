@@ -4,29 +4,35 @@ using UnityEngine;
 using UnityEngine.UI;
 public class UIGameplay : Singleton<UIGameplay>
 {
-    [SerializeField] Text scoreText, LifeText, countDownText;
+    [SerializeField] Text scoreText, LifeText, countDownText, totalScoreText;
     [SerializeField] GameObject PauseMenu;
-    [SerializeField] Image OnPauseBackground;
+    [SerializeField] GameObject LoseMenu;
+    [SerializeField] Image TransparentBackground;
     private int time { get; set; }
     private void Awake()
     {
-        GameManager.UpdateState += OnStateWait;
-        OnPauseBackground.rectTransform.sizeDelta = new Vector2(Screen.width, Screen.height);
+        GameManager.UpdateState += UIGameplayOnStateChange;
+        TransparentBackground.rectTransform.sizeDelta = new Vector2(Screen.width, Screen.height);
+
     }
-    void OnStateWait(GameState state)
+    void UIGameplayOnStateChange(GameState state)
     {
         if (state == GameState.Wait)
         {
             InvokeCountDown();
         }
 
-        if (state == GameState.Pause)
+        TransparentBackground.gameObject.SetActive(state == GameState.Pause || state == GameState.Lose);
+        PauseMenu.gameObject.SetActive(state == GameState.Pause);
+        LoseMenu.gameObject.SetActive(state == GameState.Lose);
+
+        if (state == GameState.Lose)
         {
-            PauseMenu.gameObject.SetActive(true);
-        }
-        else
+            totalScoreText.text = "Your score: " + PlayerControl.Instance.score;
+        } 
+        if (state == GameState.Restart)
         {
-            PauseMenu.gameObject.SetActive(false);
+            GameManager.UpdateState -= UIGameplayOnStateChange;
         }
     }
 
@@ -46,7 +52,7 @@ public class UIGameplay : Singleton<UIGameplay>
         {
             countDownText.gameObject.SetActive(false);
             CancelInvoke(nameof(CountDown));
-            GameManager.Instance.HandleState(GameState.Start);
+            GameManager.Instance.HandleState(GameState.Continue);
         }
     }
 

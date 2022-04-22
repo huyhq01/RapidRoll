@@ -18,10 +18,11 @@ public enum GameState
 {
     Menu,
     Wait,
-    Start,
+    Continue,
     Pause,
     Death,
     Lose,
+    Restart,
 }
 #endregion
 
@@ -30,15 +31,12 @@ public class GameManager : Singleton<GameManager>
     GameState state;
     public static event Action<GameState> UpdateState;
 
-    private int life;
-
     private UIGameplay _UIGameplay;
 
     // Start function
     private void Start()
     {
         _UIGameplay = UIGameplay.Instance;
-        life = 3;
         HandleState(GameState.Wait);
     }
 
@@ -54,15 +52,15 @@ public class GameManager : Singleton<GameManager>
             case GameState.Wait:
                 HandleWait();
                 break;
-            case GameState.Start:
-                HandleStart();
+            case GameState.Continue:
                 break;
             case GameState.Pause:
                 break;
             case GameState.Death:
-                HandleDeath();
                 break;
             case GameState.Lose:
+                break;
+            case GameState.Restart:
                 break;
         }
         UpdateState?.Invoke(newState);
@@ -86,30 +84,16 @@ public class GameManager : Singleton<GameManager>
             }
         }
     }
-
-    private void HandleStart()
-    {
-        _UIGameplay.SetLife(life);
-    }
-
-    private void HandleDeath()
-    {
-        life--;
-        _UIGameplay.SetLife(life);
-
-        // from Dead to lose
-        if (life == 0)
-        {
-            HandleState(GameState.Lose);
-        }
-    }
-
-    
+  
     public void ResumeGame(){
-        HandleState(GameState.Start);
+        HandleState(GameState.Continue);
     }
 
     public void GoToMainMenu(){
         SceneManager.LoadScene(0);
+    }
+    public void Restart(){
+        HandleState(GameState.Restart);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

@@ -13,7 +13,7 @@ public class Platform : MonoBehaviour
     }
     void OnStateWait(GameState state)
     {
-        isStopped = (state == GameState.Wait || state == GameState.Pause);
+        isStopped = (state == GameState.Wait || state == GameState.Pause || state == GameState.Lose);
     }
 
     void Update()
