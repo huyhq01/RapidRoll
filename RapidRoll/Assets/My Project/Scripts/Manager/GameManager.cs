@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 #region Enum
 
@@ -101,5 +102,14 @@ public class GameManager : Singleton<GameManager>
         {
             HandleState(GameState.Lose);
         }
+    }
+
+    
+    public void ResumeGame(){
+        HandleState(GameState.Start);
+    }
+
+    public void GoToMainMenu(){
+        SceneManager.LoadScene(0);
     }
 }
