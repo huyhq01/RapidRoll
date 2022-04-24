@@ -78,8 +78,16 @@ public class PlayerControl : Singleton<PlayerControl>
     {
         this.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation;
 
-        horizontalInput = Input.GetAxis(HORIZONTAL_INPUT);
-        transform.Translate(Vector3.right * horizontalInput * Time.deltaTime * speed);
+        // horizontalInput = Input.GetAxis(HORIZONTAL_INPUT);
+        // transform.Translate(Vector3.right * horizontalInput * Time.deltaTime * speed);
+
+        if (Input.GetKey(GameSetting.Instance.MoveLeft))
+        {
+            transform.Translate(Vector3.right * Time.deltaTime * speed);
+        } else if (Input.GetKey(GameSetting.Instance.MoveRight))
+        {
+            transform.Translate(Vector3.left * Time.deltaTime * speed);
+        }
 
         if (Input.GetKeyDown(KeyCode.Escape) && !isPause)
         {

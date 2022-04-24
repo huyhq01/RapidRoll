@@ -12,7 +12,10 @@ public class Setting : Singleton<Setting>
     [HideInInspector] public string[] difficultyArray = { Difficulty.Easy.ToString(), Difficulty.Medium.ToString(), Difficulty.Hard.ToString() };
     [HideInInspector] public int difficultyValue;
     [SerializeField] Text difficultyText;
+    [SerializeField] GameObject bindingKey;
+    public string NameOfKeyControl { get; set; }
 
+    [HideInInspector] public string currentControlKey;
     // Start is called before the first frame update
     void Start()
     {
@@ -28,7 +31,7 @@ public class Setting : Singleton<Setting>
 
     public void GoNextDiff()
     {
-        if (difficultyValue+1 > difficultyArray.Length-1)
+        if (difficultyValue + 1 > difficultyArray.Length - 1)
         {
             return;
         }
@@ -50,5 +53,10 @@ public class Setting : Singleton<Setting>
     {
         difficultyText.text = difficultyArray[value];
         GameSetting.Instance.DifficultyValue = value;
+    }
+
+    public void SetBindingKey(string controlName){
+        bindingKey.SetActive(true);
+        currentControlKey = controlName;
     }
 }
