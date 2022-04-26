@@ -1,42 +1,56 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 
-public enum KeyControl
+public enum SceneName
 {
-    MoveLeft,
-    MoveRight,
+    Menu,
+    Game,
 }
-public class GameSetting : Singleton<GameSetting>
+
+public class GameSetting : MonoBehaviour
 {
+    public static GameSetting Instance;
     public int DifficultyValue { get; set; }
     public float MusicVolume { get; set; }
     public float SoundEffectVolume { get; set; }
 
-    private AudioSource bgmusic;
 
     private void Awake()
     {
-        bgmusic = GetComponent<AudioSource>();
-        SoundEffectVolume = .6f;
-        MusicVolume = .6f;
-
-        MoveLeft = KeyCode.LeftArrow;
-        MoveRight = KeyCode.RightArrow;
-    }
-
-    public void SetVolumeMusic(float value)
-    {
-        MusicVolume = value;
-        bgmusic.volume = MusicVolume;
-    }
-    public void SetSoundEffectVolume(float value){
-        SoundEffectVolume = value;
-        if (Setting.Instance!=null)
+        if (Instance == null)
         {
-            Setting.Instance.gameObject.GetComponent<AudioSource>().volume = SoundEffectVolume;
-        } 
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+        LoadSetting();
     }
-    public KeyCode MoveLeft { get; set; }
-    public KeyCode MoveRight { get; set; }
+
+    public KeyCode MoveLeftKey { get; set; }
+    public KeyCode MoveRightKey { get; set; }
+
+    void LoadSetting()
+    {
+        string path = Application.persistentDataPath + "/savefile.json";
+        SaveSetting save;
+        if (File.Exists(path))
+        {
+            string json = File.ReadAllText(path);
+            save = JsonUtility.FromJson<SaveSetting>(json);
+        }
+        else
+        {
+            save = new SaveSetting(0, .6f, .6f, KeyCode.LeftArrow.ToString(), KeyCode.RightArrow.ToString());
+        }
+        DifficultyValue = save.difficultyValue;
+        SoundEffectVolume = save.soundEffectVolume;
+        MusicVolume = save.musicVolume;
+        MoveLeftKey =  (KeyCode) System.Enum.Parse(typeof(KeyCode), save.MoveLeftKey);
+        MoveRightKey = (KeyCode) System.Enum.Parse(typeof(KeyCode), save.MoveRightKey);
+    }
 }

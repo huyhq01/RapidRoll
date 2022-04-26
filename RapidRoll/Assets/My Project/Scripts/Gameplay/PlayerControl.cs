@@ -7,7 +7,6 @@ public class PlayerControl : Singleton<PlayerControl>
     const string HORIZONTAL_INPUT = "Horizontal";
 
     // PRVATE VARIABLES
-    private float horizontalInput;
     public int score { get; private set; }
     private UIGameplay _UIGameplay;
     private bool isAddScore { get; set; }
@@ -16,7 +15,7 @@ public class PlayerControl : Singleton<PlayerControl>
     private int life;
 
     // SERIALIZE FIELD
-    [SerializeField] private float speed;
+    public float speed { get; set; }
 
     private void Awake()
     {
@@ -49,7 +48,7 @@ public class PlayerControl : Singleton<PlayerControl>
         {
             if (item.transform.position.y <= 2f)
             {
-                this.transform.position = new Vector2(item.transform.position.x, item.transform.position.y + .5f);
+                this.transform.position = new Vector2(item.transform.position.x, item.transform.position.y + .3f);
                 break;
             }
         }
@@ -78,15 +77,13 @@ public class PlayerControl : Singleton<PlayerControl>
     {
         this.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation;
 
-        // horizontalInput = Input.GetAxis(HORIZONTAL_INPUT);
-        // transform.Translate(Vector3.right * horizontalInput * Time.deltaTime * speed);
-
-        if (Input.GetKey(GameSetting.Instance.MoveLeft))
-        {
-            transform.Translate(Vector3.right * Time.deltaTime * speed);
-        } else if (Input.GetKey(GameSetting.Instance.MoveRight))
+        if (Input.GetKey(GameSetting.Instance.MoveLeftKey))
         {
             transform.Translate(Vector3.left * Time.deltaTime * speed);
+        }
+        else if (Input.GetKey(GameSetting.Instance.MoveRightKey))
+        {
+            transform.Translate(Vector3.right * Time.deltaTime * speed);
         }
 
         if (Input.GetKeyDown(KeyCode.Escape) && !isPause)

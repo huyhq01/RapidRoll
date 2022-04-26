@@ -15,10 +15,10 @@ public class GetKey : MonoBehaviour
         switch (objectName)
         {
             case "MoveLeft":
-                this.gameObject.GetComponent<Text>().text = CapitalFirstLetter(GameSetting.Instance.MoveLeft.ToString());
+                this.gameObject.GetComponent<Text>().text = CapitalFirstLetter(GameSetting.Instance.MoveLeftKey.ToString());
                 break;
             case "MoveRight":
-                this.gameObject.GetComponent<Text>().text = CapitalFirstLetter(GameSetting.Instance.MoveRight.ToString());
+                this.gameObject.GetComponent<Text>().text = CapitalFirstLetter(GameSetting.Instance.MoveRightKey.ToString());
                 break;
         }
     }

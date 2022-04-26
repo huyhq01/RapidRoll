@@ -10,7 +10,6 @@ public class SpawnManager : Singleton<SpawnManager>
     [SerializeField] Camera cam;
     [SerializeField] int defaultSize;
     [SerializeField] int maxSize;
-    [SerializeField] float spawnRate;
 
     private ObjectPool<GameObject> Ppool;
     private ObjectPool<GameObject> Dpool;
@@ -24,6 +23,7 @@ public class SpawnManager : Singleton<SpawnManager>
 
     public float GetTopBorder() { return -bottomBorder; }
     public float GetLeftBorder() { return leftBorder; }
+    public float spawnRate { get; set; }
 
 
     private void Awake()
@@ -32,7 +32,14 @@ public class SpawnManager : Singleton<SpawnManager>
     }
     void SpawnManagerOnStateChange(GameState state)
     {
-        isStart = (state == GameState.Continue);
+        if (state == GameState.Continue)
+        {
+            StartCoroutine(nameof(SpawnPlatform));
+        } else
+        {
+            StopCoroutine(nameof(SpawnPlatform));
+        }
+
         if (state == GameState.Restart)
         {
             GameManager.UpdateState -= SpawnManagerOnStateChange;
@@ -83,15 +90,14 @@ public class SpawnManager : Singleton<SpawnManager>
 
         #endregion
 
-        // RandomFirstSpawn();
         countToSpawnDanger = Random.Range(1, 4);
-        InvokeRepeating(nameof(Spawn), 0, spawnRate);
     }
 
-    void Spawn()
+    IEnumerator SpawnPlatform()
     {
-        if (isStart)
+        while (true)
         {
+            yield return new WaitForSeconds(spawnRate);
             spawnPosition = new Vector3(Random.Range(leftBound, -leftBound), bottomBound);
             if (countToSpawnDanger == 1)
             {

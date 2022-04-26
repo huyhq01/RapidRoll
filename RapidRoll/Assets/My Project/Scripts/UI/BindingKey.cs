@@ -12,10 +12,10 @@ public class BindingKey : MonoBehaviour
             switch (Setting.Instance.currentControlKey)
             {
                 case "MoveLeft":
-                    GameSetting.Instance.MoveLeft = kcode;
+                    GameSetting.Instance.MoveLeftKey = kcode;
                     break;
                 case "MoveRight":
-                    GameSetting.Instance.MoveRight = kcode;
+                    GameSetting.Instance.MoveRightKey = kcode;
                     break;
             }
             GetKey obj = GameObject.Find(Setting.Instance.currentControlKey).GetComponent<GetKey>();

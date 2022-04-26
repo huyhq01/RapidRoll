@@ -1,15 +1,8 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 #region Enum
-
-public enum Difficult
-{
-    Easy, Normal, Hard,
-}
 public enum Tag
 {
     Danger, Platform
@@ -38,12 +31,55 @@ public class GameManager : Singleton<GameManager>
     {
         _UIGameplay = UIGameplay.Instance;
         HandleState(GameState.Wait);
+        UpdateDifficulty();
+        InvokeRepeating(nameof(ChangeDifficulty), 20, 20);
+    }
+
+    void ChangeDifficulty()
+    {
+        if (GameSetting.Instance.DifficultyValue != 2)
+        {
+            GameSetting.Instance.DifficultyValue++;
+            UpdateDifficulty();
+        }
+        else
+        {
+            CancelInvoke(nameof(ChangeDifficulty));
+        }
+    }
+    void UpdateDifficulty()
+    {
+        switch (GameSetting.Instance.DifficultyValue)
+        {
+            case 0:
+                PlayerControl.Instance.speed = 10;
+                SpawnManager.Instance.spawnRate = 1.5f;
+                UpdatePlatformSpeed(2);
+                break;
+            case 1:
+                PlayerControl.Instance.speed = 12;
+                SpawnManager.Instance.spawnRate = 1f;
+                UpdatePlatformSpeed(3);
+                break;
+            case 2:
+                PlayerControl.Instance.speed = 15;
+                SpawnManager.Instance.spawnRate = 0.5f;
+                UpdatePlatformSpeed(5);
+                break;
+        }
+    }
+
+    void UpdatePlatformSpeed(int speed){
+        Platform[] platforms = FindObjectsOfType<Platform>();
+        foreach (Platform item in platforms)
+        {
+            item.speed = speed;
+        }
     }
 
     public void HandleState(GameState newState)
     {
         state = newState;
-        Debug.Log("Current state: " + state);
 
         switch (state)
         {
@@ -79,20 +115,23 @@ public class GameManager : Singleton<GameManager>
             if (item.transform.position.y <= 2)
             {
                 PlayerControl.Instance.gameObject.transform.position =
-                    new Vector2(item.transform.position.x, item.transform.position.y +.5f);
+                    new Vector2(item.transform.position.x, item.transform.position.y + .3f);
                 break;
             }
         }
     }
-  
-    public void ResumeGame(){
+
+    public void ResumeGame()
+    {
         HandleState(GameState.Continue);
     }
 
-    public void GoToMainMenu(){
-        SceneManager.LoadScene(0);
+    public void GoToMainMenu()
+    {
+        SceneManager.LoadScene("Menu");
     }
-    public void Restart(){
+    public void Restart()
+    {
         HandleState(GameState.Restart);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }

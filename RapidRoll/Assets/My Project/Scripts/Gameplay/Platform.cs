@@ -5,18 +5,33 @@ using UnityEngine.Pool;
 public class Platform : MonoBehaviour
 {
     private bool isStopped { get; set; }
-    [SerializeField] float speed;
+    public int speed { get; set; }
 
     private void Awake()
     {
         GameManager.UpdateState += OnStateWait;
+    }
+    private void OnEnable()
+    {
+        switch (GameSetting.Instance.DifficultyValue)
+        {
+            case 0:
+                speed = 2;
+                break;
+            case 1:
+                speed = 3;
+                break;
+            case 2:
+                speed = 5;
+                break;
+        }
     }
     void OnStateWait(GameState state)
     {
         isStopped = (state == GameState.Wait || state == GameState.Pause || state == GameState.Lose);
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (!isStopped)
         {

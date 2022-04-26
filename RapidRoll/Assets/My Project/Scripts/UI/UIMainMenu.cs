@@ -8,7 +8,6 @@ public class UIMainMenu : MonoBehaviour
 {
     [SerializeField] GameObject SettingUI;
 
-
     // Start is called before the first frame update
     void Start()
     {
@@ -16,19 +15,31 @@ public class UIMainMenu : MonoBehaviour
         SettingUI.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(Screen.width - 100f, Screen.height - 60);
     }
 
-    public void StartGame(){
-        SceneManager.LoadScene(3);
+    public void StartGame()
+    {
+        SceneManager.LoadScene("Game");
     }
 
-    public void HighScore(){
+    public void HighScore()
+    {
 
     }
 
-    public void Setting(){
+    public void Setting()
+    {
         SettingUI.gameObject.SetActive(true);
     }
 
-    public void BackToMenu(){
+    public void BackToMenu()
+    {
         SettingUI.gameObject.SetActive(false);
+    }
+    public void ExitApp()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.ExitPlaymode();
+#else
+            Application.Quit();
+#endif
     }
 }
