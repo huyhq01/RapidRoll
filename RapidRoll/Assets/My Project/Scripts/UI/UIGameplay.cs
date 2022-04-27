@@ -1,17 +1,25 @@
-using System.Collections;
-using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using Array = System.Array;
 public class UIGameplay : Singleton<UIGameplay>
 {
     [SerializeField] Text scoreText, LifeText, countDownText, totalScoreText;
     [SerializeField] GameObject PauseMenu;
     [SerializeField] GameObject LoseMenu;
+    [SerializeField] GameObject InputField;
+    [SerializeField] Text CongratText;
     [SerializeField] Image TransparentBackground;
     private int time { get; set; }
+    private int playerHighscore { get; set; }
+    private string playerName { get; set; }
+    private PlayerData[] highscores = new PlayerData[10];
     private void Awake()
     {
         GameManager.UpdateState += UIGameplayOnStateChange;
+        InputField.SetActive(false);
+        CongratText.gameObject.SetActive(false);
         TransparentBackground.rectTransform.sizeDelta = new Vector2(Screen.width, Screen.height);
 
     }
@@ -28,14 +36,54 @@ public class UIGameplay : Singleton<UIGameplay>
 
         if (state == GameState.Lose)
         {
-            totalScoreText.text = "Your score: " + PlayerControl.Instance.score;
-        } 
+            int score = PlayerControl.Instance.score;
+            totalScoreText.text = "Your score: " + score;
+            CheckHighscore(score);
+        }
         if (state == GameState.Restart)
         {
             GameManager.UpdateState -= UIGameplayOnStateChange;
         }
     }
 
+    void CheckHighscore(int score)
+    {
+        Array.Copy(GetPlayerData(), highscores, GetPlayerData().Length);
+        if (score > highscores[highscores.Length-1].score)
+        {
+            CongratText.gameObject.SetActive(true);
+            InputField.gameObject.SetActive(true);
+            playerHighscore = score;
+        }
+    }
+    PlayerData[] GetPlayerData()
+    {
+        // This prevents players who want to delete highscores file when beat the hall of fame (i mean highscore table)
+        // yeah yeah I know they can do stuff with my game and the saved files too but this is the only thing i can do
+        // and that make me feel like I'm GENIUS about security
+        string path = Application.persistentDataPath + "/highscore.json";
+        if (File.Exists(path))
+        {
+            string json = File.ReadAllText(path);
+            return JsonHelper.FromJson<PlayerData>(json);
+
+        }
+        else
+        {
+            PlayerData[] highscoresTemp = new PlayerData[10];
+            for (int i = 0; i < highscoresTemp.Length; i++)
+            {
+                int num = i + 1;
+                highscoresTemp[i] = new PlayerData("BOT " + num, Random.Range(100, 10000));
+            }
+            var qry = from p in highscoresTemp
+                      orderby p.score descending
+                      select p;
+            string json = JsonHelper.ToJson(qry.ToArray<PlayerData>(), true);
+            File.WriteAllText(Application.persistentDataPath + "/highscore.json", json);
+            return JsonHelper.FromJson<PlayerData>(json);
+        }
+    }
     public void InvokeCountDown()
     {
         countDownText.gameObject.SetActive(true);
@@ -64,5 +112,28 @@ public class UIGameplay : Singleton<UIGameplay>
     public void SetLife(int lifeLeft)
     {
         LifeText.text = "Lifes: " + lifeLeft;
+    }
+
+    public void SetPlayerName(string name)
+    {
+        playerName = name;
+    }
+
+    public void SetHighscore()
+    {
+        if (playerName.Length == 0)
+        {
+            playerName = "HEHEHE";
+        }
+        PlayerData newPlayer = new PlayerData(playerName, playerHighscore);
+        highscores[highscores.Length-1] = newPlayer;
+        var qry = from p in highscores
+                  orderby p.score descending
+                  select p;
+        string json = JsonHelper.ToJson(qry.ToArray<PlayerData>(), true);
+        File.WriteAllText(Application.persistentDataPath + "/highscore.json", json);
+
+
+        InputField.gameObject.SetActive(false);
     }
 }

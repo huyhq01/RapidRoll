@@ -26,6 +26,10 @@ public class GameManager : Singleton<GameManager>
 
     private UIGameplay _UIGameplay;
 
+    private AudioSource soundSource;
+    [SerializeField] private AudioClip soundTest;
+
+
     // Start function
     private void Start()
     {
@@ -33,6 +37,9 @@ public class GameManager : Singleton<GameManager>
         HandleState(GameState.Wait);
         UpdateDifficulty();
         InvokeRepeating(nameof(ChangeDifficulty), 20, 20);
+
+        soundSource = GetComponent<AudioSource>();
+        soundSource.volume = GameSetting.Instance.SoundEffectVolume;
     }
 
     void ChangeDifficulty()
@@ -69,7 +76,8 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-    void UpdatePlatformSpeed(int speed){
+    void UpdatePlatformSpeed(int speed)
+    {
         Platform[] platforms = FindObjectsOfType<Platform>();
         foreach (Platform item in platforms)
         {
@@ -95,6 +103,7 @@ public class GameManager : Singleton<GameManager>
             case GameState.Death:
                 break;
             case GameState.Lose:
+                soundSource.PlayOneShot(soundTest);
                 break;
             case GameState.Restart:
                 break;

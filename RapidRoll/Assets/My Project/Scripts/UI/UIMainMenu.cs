@@ -22,7 +22,7 @@ public class UIMainMenu : MonoBehaviour
 
     public void HighScore()
     {
-
+        SceneManager.LoadScene("Highscores");
     }
 
     public void Setting()
