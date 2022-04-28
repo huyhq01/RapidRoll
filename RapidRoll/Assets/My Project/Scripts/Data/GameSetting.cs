@@ -16,7 +16,6 @@ public class GameSetting : MonoBehaviour
     public float MusicVolume { get; set; }
     public float SoundEffectVolume { get; set; }
 
-
     private void Awake()
     {
         if (Instance == null)
@@ -29,6 +28,7 @@ public class GameSetting : MonoBehaviour
             Destroy(gameObject);
         }
         LoadSetting();
+        this.gameObject.GetComponent<AudioSource>().volume = MusicVolume;
     }
 
     public KeyCode MoveLeftKey { get; set; }

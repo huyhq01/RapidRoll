@@ -25,17 +25,16 @@ public class GameManager : Singleton<GameManager>
     public static event Action<GameState> UpdateState;
 
     private UIGameplay _UIGameplay;
-
     private AudioSource soundSource;
-    [SerializeField] private AudioClip soundTest;
+    public int difficulty { get; private set; }
+    [SerializeField] private AudioClip LoseClip, DeathClip;
 
-
-    // Start function
     private void Start()
     {
+        difficulty = GameSetting.Instance.DifficultyValue;
         _UIGameplay = UIGameplay.Instance;
         HandleState(GameState.Wait);
-        UpdateDifficulty();
+        UpdateDifficulty(difficulty);
         InvokeRepeating(nameof(ChangeDifficulty), 20, 20);
 
         soundSource = GetComponent<AudioSource>();
@@ -44,19 +43,19 @@ public class GameManager : Singleton<GameManager>
 
     void ChangeDifficulty()
     {
-        if (GameSetting.Instance.DifficultyValue != 2)
-        {
-            GameSetting.Instance.DifficultyValue++;
-            UpdateDifficulty();
-        }
-        else
+        if (difficulty == 2)
         {
             CancelInvoke(nameof(ChangeDifficulty));
         }
+        else
+        {
+            difficulty++;
+            UpdateDifficulty(difficulty);
+        }
     }
-    void UpdateDifficulty()
+    void UpdateDifficulty(int _difficulty)
     {
-        switch (GameSetting.Instance.DifficultyValue)
+        switch (_difficulty)
         {
             case 0:
                 PlayerControl.Instance.speed = 10;
@@ -101,9 +100,10 @@ public class GameManager : Singleton<GameManager>
             case GameState.Pause:
                 break;
             case GameState.Death:
+                soundSource.PlayOneShot(DeathClip);
                 break;
             case GameState.Lose:
-                soundSource.PlayOneShot(soundTest);
+                soundSource.PlayOneShot(LoseClip);
                 break;
             case GameState.Restart:
                 break;
@@ -111,10 +111,7 @@ public class GameManager : Singleton<GameManager>
         UpdateState?.Invoke(newState);
 
     }
-    private void HandlePause()
-    {
 
-    }
     private void HandleWait()
     {
         // find platform in range and put player on one of them (random)
@@ -137,6 +134,7 @@ public class GameManager : Singleton<GameManager>
 
     public void GoToMainMenu()
     {
+        HandleState(GameState.Restart);
         SceneManager.LoadScene("Menu");
     }
     public void Restart()

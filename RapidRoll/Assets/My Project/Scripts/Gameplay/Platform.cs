@@ -13,7 +13,7 @@ public class Platform : MonoBehaviour
     }
     private void OnEnable()
     {
-        switch (GameSetting.Instance.DifficultyValue)
+        switch (GameManager.Instance.difficulty)
         {
             case 0:
                 speed = 2;

@@ -46,9 +46,9 @@ public class PlayerControl : Singleton<PlayerControl>
         GameObject[] platforms = GameObject.FindGameObjectsWithTag(Tag.Platform.ToString());
         foreach (GameObject item in platforms)
         {
-            if (item.transform.position.y <= 2f)
+            if (item.gameObject.transform.position.y <= 2f)
             {
-                this.transform.position = new Vector2(item.transform.position.x, item.transform.position.y + .3f);
+                this.transform.position = new Vector2(item.gameObject.transform.position.x, item.gameObject.transform.position.y + .3f);
                 break;
             }
         }
@@ -106,17 +106,16 @@ public class PlayerControl : Singleton<PlayerControl>
     {
         if (other.gameObject.CompareTag(Tag.Danger.ToString()))
         {
-            GameManager.Instance.HandleState(GameState.Death);
             life--;
             _UIGameplay.SetLife(life);
             if (life > 0)
             {
+                GameManager.Instance.HandleState(GameState.Death);
                 GameManager.Instance.HandleState(GameState.Wait);
             }
             else
             {
                 GameManager.Instance.HandleState(GameState.Lose);
-
             }
 
         }

@@ -49,7 +49,7 @@ public class UIGameplay : Singleton<UIGameplay>
     void CheckHighscore(int score)
     {
         Array.Copy(GetPlayerData(), highscores, GetPlayerData().Length);
-        if (score > highscores[highscores.Length-1].score)
+        if (score > highscores[highscores.Length - 1].score)
         {
             CongratText.gameObject.SetActive(true);
             InputField.gameObject.SetActive(true);
@@ -106,7 +106,7 @@ public class UIGameplay : Singleton<UIGameplay>
 
     public void SetScore(int score)
     {
-        scoreText.text = "Score : " + score;
+        scoreText.text = "Score : " + (score == 0 ? 0 : score);
     }
 
     public void SetLife(int lifeLeft)
@@ -126,7 +126,7 @@ public class UIGameplay : Singleton<UIGameplay>
             playerName = "HEHEHE";
         }
         PlayerData newPlayer = new PlayerData(playerName, playerHighscore);
-        highscores[highscores.Length-1] = newPlayer;
+        highscores[highscores.Length - 1] = newPlayer;
         var qry = from p in highscores
                   orderby p.score descending
                   select p;
